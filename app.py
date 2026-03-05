@@ -4,13 +4,13 @@ import requests
 import time
 
 # --- CONFIGURATION ---
-# Replace these with your exact details!
-AWS_REGION = "" 
-AWS_ACCESS_KEY = ""
-AWS_SECRET_KEY = ""
-S3_BUCKET_NAME = ""
-KNOWLEDGE_BASE_ID = ""
-DATA_SOURCE_ID = ""
+# Pulling ALL configuration securely from Streamlit Cloud Secrets!
+AWS_REGION = st.secrets["AWS_REGION"]
+AWS_ACCESS_KEY = st.secrets["AWS_ACCESS_KEY"]
+AWS_SECRET_KEY = st.secrets["AWS_SECRET_KEY"]
+S3_BUCKET_NAME = st.secrets["S3_BUCKET_NAME"]
+KNOWLEDGE_BASE_ID = st.secrets["KNOWLEDGE_BASE_ID"]
+DATA_SOURCE_ID = st.secrets["DATA_SOURCE_ID"]
 
 # Initialize AWS Clients
 s3_client = boto3.client('s3', region_name=AWS_REGION, aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY)
@@ -21,7 +21,7 @@ bedrock_agent_runtime = boto3.client('bedrock-agent-runtime', region_name=AWS_RE
 def fetch_and_upload_github_repo(repo_url):
     """Fetches top-level files from a public GitHub repo and uploads them to S3."""
     try:
-        # FIXED URL PARSING LOGIC:
+        # URL PARSING LOGIC:
         clean_url = repo_url.replace("https://github.com/", "").replace("http://github.com/", "").strip("/")
         parts = clean_url.split("/")
         
